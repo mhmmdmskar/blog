@@ -24,16 +24,13 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric',
-            'deskripsi' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'stock' => 'required|integer|min:0',
         ]);
 
-        Product::create([
-            'name' => $validated['nama'],
-            'price' => $validated['harga'],
-            'description' => $validated['deskripsi'],
-        ]);
+        Product::create($validated);
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
@@ -49,16 +46,18 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric',
-            'deskripsi' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'stock' => 'required|integer|min:0',
         ]);
 
         $product = Product::findOrFail($id);
         $product->update([
-            'name' => $request->nama,
-            'price' => $request->harga,
-            'description' => $request->deskripsi,
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'stock' => $request->stock,
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui!');
@@ -74,9 +73,18 @@ class ProductController extends Controller
     }
 
     // Tampilkan produk untuk user biasa
-    public function userIndex()
+    public function userIndex(Request $request)
     {
-        $products = Product::all();
-        return view('user.dashboard', compact('products'));
+        $query = Product::query();
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%$search%")
+                  ->orWhere('description', 'like', "%$search%");
+        }
+
+        $products = $query->get();
+
+        return view('user.products.index', compact('products'));
     }
 }

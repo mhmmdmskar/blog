@@ -21,6 +21,13 @@
         <textarea name="deskripsi" class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
     </div>
 
+    <div class="mb-4">
+    <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
+    <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock ?? '') }}"
+           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+</div>
+
+
     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
         Simpan Produk
     </button>

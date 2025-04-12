@@ -6,52 +6,49 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserProductController;
+use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Middleware\IsUser;
+use App\Http\Middleware\IsAdmin;
 
+// =======================
+// REDIRECT ROOT KE LOGIN
+// =======================
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
 // =======================
-// ROUTE UNTUK USER BIASA
+// REDIRECT SETELAH LOGIN
 // =======================
-Route::middleware(['auth', 'isUser'])->group(function () {
-    // Dashboard user - daftar produk
-    Route::get('/dashboard', [ProductController::class, 'userIndex'])->name('dashboard');
-
-    // Daftar produk (khusus user)
-    Route::get('/products', [ProductController::class, 'userIndex'])->name('user.products');
-
-    // Edit profil
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Tambah ke keranjang
-    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-
-    // Tampilkan keranjang
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-});
+Route::middleware(['auth'])->get('/dashboard', function () {
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('user.dashboard');
+})->name('dashboard');
 
 // =======================
-// ROUTE KHUSUS ADMIN
+// ROUTE UNTUK ADMIN
 // =======================
-Route::middleware(['auth', 'isAdmin']) // ✅ Ganti class langsung ke alias 'isAdmin'
+Route::middleware(['auth', IsAdmin::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        // Dashboard admin
+
+        // Dashboard Admin
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // Kelola User
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/users/create', [AdminController::class, 'createUserForm'])->name('users.create');
-        Route::post('/users', [AdminController::class, 'createUser'])->name('users.store');
-        Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('users.edit');
-        Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
-        Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-        // Kelola Produk (admin)
+        // Produk
         Route::resource('products', ProductController::class)->names([
             'index'   => 'products.index',
             'create'  => 'products.create',
@@ -60,9 +57,43 @@ Route::middleware(['auth', 'isAdmin']) // ✅ Ganti class langsung ke alias 'isA
             'update'  => 'products.update',
             'destroy' => 'products.destroy',
         ]);
+
+        // Transaksi Admin
+        Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions.index');
+        Route::post('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
     });
 
 // =======================
-// ROUTE AUTH (Laravel Breeze)
+// ROUTE UNTUK USER
+// =======================
+Route::middleware(['auth', IsUser::class])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
+
+        // Dashboard User
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+
+        // Produk
+        Route::get('/products', [ProductController::class, 'userIndex'])->name('products');
+
+        // Cart
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+        Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+        Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+        // Transaksi User
+        Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
+        Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+
+        // Profile
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+// =======================
+// ROUTE AUTH
 // =======================
 require __DIR__.'/auth.php';

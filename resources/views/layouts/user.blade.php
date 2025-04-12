@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
+    <title>Dashboard User</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -21,17 +21,14 @@
             <input type="text" placeholder="Search..." class="w-full p-2 text-sm border rounded-md focus:outline-none focus:ring">
         </div>
         <nav class="flex-1 px-4 space-y-2 mt-2">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
+            <a href="{{ route('dashboard') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
                 <span class="material-icons mr-2">dashboard</span> Dashboard
             </a>
-            <a href="{{ route('admin.products.index') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <span class="material-icons mr-2">inventory_2</span> Produk
+            <a href="{{ route('user.products') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
+                <span class="material-icons mr-2">shopping_cart</span> Produk
             </a>
-            <a href="{{ route('admin.transactions.index') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <span class="material-icons mr-2">receipt_long</span> Transaksi
-            </a>
-            <a href="{{ route('admin.users.index') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
-                <span class="material-icons mr-2">people</span> Kelola User
+            <a href="{{ route('user.transactions') }}" class="flex items-center p-2 rounded hover:bg-gray-100">
+                <span class="material-icons mr-2">receipt</span> Transaksi
             </a>
         </nav>
         <form method="POST" action="{{ route('logout') }}" class="p-4">
@@ -48,6 +45,7 @@
         <!-- Hamburger (mobile only) -->
         <div class="md:hidden mb-4">
             <button id="toggleSidebar" class="p-2 bg-white shadow rounded">
+                <!-- Hamburger SVG from svgrepo -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M3 12h18v2H3v-2zm0-5h18v2H3V7zm0 10h18v2H3v-2z"/>
                 </svg>

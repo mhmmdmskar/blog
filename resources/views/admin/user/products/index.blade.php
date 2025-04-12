@@ -1,17 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('content')
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
-    <h2 class="text-xl font-bold text-[#305c88] mb-6">Daftar Produk</h2>
+    <h1 class="text-2xl font-bold mb-4">Daftar Produk</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @foreach($products as $product)
-            <div class="border p-4 rounded shadow-sm bg-gray-50">
-                <h3 class="text-lg font-semibold text-[#305c88]">{{ $product->name }}</h3>
-                <p class="text-sm text-gray-700">Harga: Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                <p class="text-sm text-gray-600 mt-1">{{ $product->description }}</p>
-            </div>
-        @endforeach
-    </div>
+    @foreach ($products as $product)
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="font-semibold text-lg">{{ $product->name }}</h2>
+            <p class="text-gray-600">{{ $product->description }}</p>
+            <p class="text-blue-600 font-bold mt-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+
+            <form action="{{ route('user.cart.add', $product->id) }}" method="POST" class="mt-3">
+                @csrf
+                <button type="submit" class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">
+                    🛒
+                </button>
+            </form>
+        </div>
+    @endforeach
 </div>
+    </div>
 @endsection

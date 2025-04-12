@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
@@ -31,6 +31,13 @@
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
+
+        <div class="mb-4">
+    <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
+    <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock ?? '') }}"
+           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+</div>
+
 
         <div class="flex justify-between items-center">
             <a href="{{ route('admin.products.index') }}" class="text-gray-500 hover:underline">← Kembali</a>
