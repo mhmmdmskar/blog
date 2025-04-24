@@ -41,12 +41,7 @@ Route::middleware(['auth', IsAdmin::class])
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // Kelola User
-        Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-        Route::post('/users', [UserController::class, 'store'])->name('users.store');
-        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::resource('users', UserController::class);
 
         // Produk
         Route::resource('products', ProductController::class)->names([
@@ -60,7 +55,7 @@ Route::middleware(['auth', IsAdmin::class])
 
         // Transaksi Admin
         Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions.index');
-        Route::post('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
+        Route::put('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
     });
 
 // =======================

@@ -52,4 +52,10 @@ public function index()
     return view('user.cart.index', compact('cartItems'));
 }
 
+public function transactions()
+{
+    $transactions = auth()->user()->transactions()->latest()->get();
+    return view('user.transactions.index', compact('transactions'));
+}
+
 }

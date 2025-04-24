@@ -22,14 +22,18 @@
     </div>
 
     <div class="mb-4">
-    <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
-    <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock ?? '') }}"
-           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-</div>
+        <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
+        <input type="number" name="stock" id="stock" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+    </div>
 
+    <div class="flex space-x-4">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Simpan Produk
+        </button>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        Simpan Produk
-    </button>
+        <a href="{{ route('admin.products.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Batal
+        </a>
+    </div>
 </form>
 @endsection
