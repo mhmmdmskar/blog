@@ -10,6 +10,12 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'stock',
-    ];    
+        'stock'
+    ];
+
+    // Relasi ke transaksi
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

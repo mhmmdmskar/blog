@@ -9,32 +9,36 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    // ✅ Sudah lengkap termasuk 'status'
     protected $fillable = [
         'product_id',
-        'product_name',
         'user_id',
-        'price',
-        'quantity',
         'total_price',
         'status',
+        'quantity',
+         'snap_token',
     ];
 
-    // ✅ Relasi ke user
+    // Relasi ke user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // ✅ Relasi ke product
+    // Relasi ke produk
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    // ✅ Relasi ke transaction item kalau ada
-    public function items()
+    // Relasi ke detail transaksi
+    public function details()
     {
-        return $this->hasMany(TransactionItem::class);
+        return $this->hasMany(TransactionDetail::class);
     }
+
+    // Transaction.php
+const STATUS_PENDING = 'Menunggu';
+const STATUS_SUCCESS = 'Berhasil';
+const STATUS_FAILED = 'Gagal';
+
 }

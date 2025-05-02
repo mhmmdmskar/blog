@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
 
-    <h2 class="text-xl font-bold text-[#305c88] mb-6">Tambah User</h2>
+    <h2 class="text-xl font-bold text-[#305c88] mb-6">Tambah Akun User</h2>
 
     {{-- Tampilkan error validasi --}}
     @if ($errors->any())
@@ -35,7 +35,8 @@
         </div>
 
         <div class="flex justify-between items-center">
-            <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:underline text-sm">← Kembali</a>
+            <!-- Tombol Batal untuk kembali ke halaman daftar user -->
+            <a href="{{ route('admin.users.index') }}" class="text-gray-500 hover:underline text-sm">← Batal</a>
             <button type="submit" class="bg-[#305c88] text-white px-4 py-2 rounded hover:bg-[#27496d]">
                 Simpan
             </button>

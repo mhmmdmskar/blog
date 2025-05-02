@@ -11,6 +11,8 @@
                     <th class="px-4 py-2 border">Nama Produk</th>
                     <th class="px-4 py-2 border">Deskripsi</th>
                     <th class="px-4 py-2 border">Harga</th>
+                    <th class="px-4 py-2 border">Jumlah</th>
+                    <th class="px-4 py-2 border">Total Harga</th>
                     <th class="px-4 py-2 border">Aksi</th>
                 </tr>
             </thead>
@@ -20,10 +22,13 @@
                     <td class="border px-4 py-2">{{ $item->product->name }}</td>
                     <td class="border px-4 py-2">{{ $item->product->description }}</td>
                     <td class="border px-4 py-2">Rp{{ number_format($item->product->price, 0, ',', '.') }}</td>
+                    <td class="border px-4 py-2">{{ $item->quantity }}</td>
+                    <td class="border px-4 py-2">Rp{{ number_format($item->total_price, 0, ',', '.') }}</td>
                     <td class="border px-4 py-2">
+                        <!-- Form untuk hapus produk dari keranjang -->
                         <form action="{{ route('user.cart.remove', $item->id) }}" method="POST">
                             @csrf
-                            @method('DELETE')
+                            @method('DELETE')  <!-- Menggunakan method DELETE untuk menghapus -->
                             <button type="submit" onclick="return confirm('Yakin ingin hapus item ini?')" class="text-red-500 hover:underline">
                                 Hapus
                             </button>
@@ -34,13 +39,18 @@
             </tbody>
         </table>
 
+        {{-- Menampilkan Total Harga --}}
+        <div class="mt-4 text-right">
+            <p class="font-semibold">Total Harga: Rp{{ number_format($cartItems->sum('total_price'), 0, ',', '.') }}</p>
+        </div>
+
         {{-- Tombol Checkout --}}
         <form action="{{ route('user.cart.checkout') }}" method="POST" class="mt-4 text-right">
-    @csrf
-    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Checkout
-    </button>
-</form>
+            @csrf
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Checkout
+            </button>
+        </form>
     @else
         <p class="text-gray-500">Keranjang kamu kosong.</p>
     @endif

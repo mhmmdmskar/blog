@@ -57,6 +57,11 @@
             @endforelse
         </tbody>
     </table>
+
+    <!-- Pagination controls -->
+    <div class="mt-4">
+        {{ $products->links() }} <!-- Pagination links -->
+    </div>
 </div>
 
 <script>

@@ -47,10 +47,12 @@
                         @endif
                     </td>
                     <td class="py-3 px-4 text-center">
-                        <form action="{{ route('user.cart.add', $product->id) }}" method="POST">
+                        <form action="{{ route('user.transactions.store') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
                             <button 
-                                type="submit"
+                                type="submit" 
                                 class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white rounded transition
                                     {{ $product->stock < 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700' }}"
                                 {{ $product->stock < 1 ? 'disabled' : '' }}
@@ -67,6 +69,11 @@
                 @endforelse
             </tbody>
         </table>
+
+        <!-- Pagination controls -->
+        <div class="mt-4">
+            {{ $products->links() }}
+        </div>
     </div>
 </div>
 @endsection

@@ -8,7 +8,7 @@
             Belum ada transaksi yang tercatat.
         </div>
     @else
-        <div class="overflow-x-auto bg-white rounded shadow">
+        <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
             <table class="min-w-full text-sm text-center">
                 <thead class="bg-gray-100 text-gray-600 uppercase">
                     <tr>
@@ -17,6 +17,7 @@
                         <th class="px-6 py-3">Total</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3">Tanggal</th>
+                        <th class="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700">
@@ -42,6 +43,11 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4">{{ $trx->created_at->format('d M Y H:i') }}</td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('user.transactions.invoice', $trx->id) }}" class="text-blue-500 hover:text-blue-700">
+                                    View Invoice
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

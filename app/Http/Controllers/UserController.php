@@ -53,4 +53,53 @@ public function store(Request $request)
 
     return redirect()->route('admin.users.index')->with('success', 'Akun user berhasil dibuat.');
 }
+
+public function destroy($id)
+{
+    $user = User::findOrFail($id);
+
+    return redirect()->route('admin.users.index')->with('error', 'User not found');
+}
+
+public function edit($id)
+{
+    $user = User::findOrFail($id);
+    return view('admin.edit-user', compact('user'));
+}
+
+public function update(Request $request, $id)
+{
+    // Validasi input awal
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'password' => 'nullable|min:6|confirmed',
+    ]);
+
+    $user = User::findOrFail($id);
+
+    // Cek apakah password baru sama dengan password lama
+    if ($request->filled('password')) {
+        if (Hash::check($request->password, $user->password)) {
+            return back()
+                ->withErrors(['password' => 'Password baru tidak boleh sama dengan password lama.'])
+                ->withInput(); // supaya input sebelumnya tetap tampil
+        }
+
+        // Jika tidak sama, tambahkan ke data update
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+    } else {
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+    }
+
+    return redirect()->route('admin.users.index')->with('success', 'Data user berhasil diperbarui.');
+}
+
 }
